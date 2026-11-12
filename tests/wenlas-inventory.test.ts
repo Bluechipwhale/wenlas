@@ -57,3 +57,8 @@ it('supports client invitations, role limits, editable emails and immediate acce
 it('rate limits repeated failed sign-ins without revealing whether an email exists',async()=>{
  const auth=new InventoryAuth(database);for(let i=0;i<8;i++)await expect(auth.login('unknown@example.com','wrong')).rejects.toThrow('incorrect');await expect(auth.login('unknown@example.com','wrong')).rejects.toThrow('Too many');
 });
+it('lets each team member change their password and revokes every old session',async()=>{
+ const auth=new InventoryAuth(database),owner=await auth.setup(ownerEmail,password,setupToken,setupToken);
+ const next='A new private password 385!';await expect(auth.changePassword(owner.user,'wrong password',next)).rejects.toThrow('incorrect');expect(await auth.user(owner.token)).toEqual(owner.user);
+ await auth.changePassword(owner.user,password,next);expect(await auth.user(owner.token)).toBe(null);await expect(auth.login(ownerEmail,password)).rejects.toThrow('incorrect');expect((await auth.login(ownerEmail,next)).user.email).toBe(ownerEmail);
+});

@@ -8,7 +8,7 @@ Use the Business plan's separate Node.js Web App. Framework: Next.js. Node: 24. 
 
 The build creates a public-only .env.production from config/hostinger-public.json and packages static/public assets into the standalone output. Private credentials belong only in this Wenlas app's environment settings. Never upload local .env files, .data, Git metadata or a Windows-generated build as source.
 
-After committing the verified code, run powershell -NoProfile -File scripts/package-hostinger.ps1. Upload artifacts/wenlas-hostinger-source.zip through the new app's source upload flow. The ZIP is generated from the committed tree and excludes ignored secrets and previous Git history. The accompanying SHA-256 file identifies the release.
+After committing the verified code, run powershell -NoProfile -File scripts/package-hostinger.ps1. Upload artifacts/wenlas-hostinger-source.zip through the new app's source upload flow. The ZIP is generated from the committed tree and excludes ignored secrets, previous Git history, development tests and unused legacy media. The accompanying SHA-256 file identifies the release.
 
 ## Persistent inventory database
 

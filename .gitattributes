@@ -7,3 +7,11 @@
 *.ico binary
 # Applied migration checksums cover exact bytes, including historical line endings.
 supabase/migrations/*.sql -text
+
+# Keep development fixtures in Git/CI, out of the Wenlas production source ZIP.
+tests export-ignore
+.github export-ignore
+public/images/category-editorial export-ignore
+public/images/category-thumbnails export-ignore
+public/images/eedgefoods export-ignore
+public/images/pz export-ignore

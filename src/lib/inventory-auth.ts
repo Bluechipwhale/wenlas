@@ -49,6 +49,12 @@ export class InventoryAuth{
   return this.database.transaction(async query=>(await query<InventoryUser>('SELECT u.id,u.email,u.role FROM wenlas_inventory_users u JOIN wenlas_inventory_sessions s ON s.user_id=u.id WHERE s.token_hash=? AND s.expires_at>? AND u.disabled=0',[digest(token),new Date().toISOString()]))[0]||null);
  }
  async logout(token:string|undefined){if(token)await this.database.transaction(query=>query('DELETE FROM wenlas_inventory_sessions WHERE token_hash=?',[digest(token)]));}
+ async changePassword(actor:InventoryUser,currentPassword:string,newPassword:string){
+  const [existing]=await this.database.transaction(query=>query<{password_hash:string}>('SELECT password_hash FROM wenlas_inventory_users WHERE id=? AND disabled=0',[actor.id]));
+  if(!existing||!await passwordMatches(currentPassword,existing.password_hash))throw Error('Your current password is incorrect');
+  const encoded=await passwordHash(newPassword);
+  await this.database.transaction(async query=>{const [current]=await query<{password_hash:string}>('SELECT password_hash FROM wenlas_inventory_users WHERE id=? AND disabled=0 FOR UPDATE',[actor.id]);if(!current||current.password_hash!==existing.password_hash)throw Error('Your account changed. Sign in again before updating your password.');await query('UPDATE wenlas_inventory_users SET password_hash=? WHERE id=?',[encoded,actor.id]);await query('DELETE FROM wenlas_inventory_sessions WHERE user_id=?',[actor.id]);});
+ }
  async users(actor:InventoryUser){if(actor.role!=='owner')throw Error('Forbidden');return this.database.transaction(query=>query<InventoryUser&{disabled:number;created_at:string}>('SELECT id,email,role,disabled,created_at FROM wenlas_inventory_users ORDER BY created_at'));}
  async invite(actor:InventoryUser,email:string,role:'manager'|'viewer'){
   if(actor.role!=='owner')throw Error('Forbidden');email=email.trim().toLowerCase();

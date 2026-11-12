@@ -19,3 +19,5 @@ Stock managers can view, export and change stock. Viewers can view/export only. 
 Production uses a separate Wenlas MySQL database on Hostinger. Source deployments do not recreate inventory or reset quantities. Keep the database and backups separate from the previous business. The app hashes passwords with salted scrypt and stores only hashes of session/invitation tokens. Sessions expire after 24 hours and are revoked on logout or account changes.
 
 Back up the dedicated database using Hostinger's database backup tools. Do not place database passwords, owner setup codes, session cookies or invitation links in Git, support messages or public documentation.
+
+Every team member can use the key icon in the workspace header to change their own password after confirming the current password. Password changes sign out every existing session.

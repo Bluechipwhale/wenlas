@@ -29,5 +29,5 @@ test('stock changes update another browser and team access can be invited, edite
  expect((await client.request.get(origin+'/api/inventory')).status()).toBe(401);
  const login=await client.request.post(origin+'/api/inventory/auth',{headers:{origin},data:{action:'login',email:'updated-client@example.test',password}});expect(login.ok()).toBe(true);
  const stock=await page.request.get('/api/inventory/export');expect(stock.ok()).toBe(true);expect(await stock.text()).toContain(product.name);
- await customer.close();await client.close();
+ await page.getByRole('button',{name:'Change your password',exact:true}).click();const passwordForm=page.getByRole('dialog',{name:'Change your password',exact:true});await passwordForm.getByLabel('Current password',{exact:true}).fill(password);await passwordForm.getByLabel('New password',{exact:true}).fill('A new private password 385!');await passwordForm.getByLabel('Confirm new password',{exact:true}).fill('A new private password 385!');await passwordForm.getByRole('button',{name:'Update password'}).click();await expect(page).toHaveURL(/inventory\/login/,{timeout:30000});await customer.close();await client.close();
 });

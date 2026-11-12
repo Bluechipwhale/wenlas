@@ -1,0 +1,7 @@
+import Link from 'next/link';
+import { Smartphone, Monitor, ArrowUpRight } from 'lucide-react';
+import { AppInstall } from '@/components/app-install';
+export const metadata = { title: 'The Wenlas app', description: 'Keep Wenlas Resources Ltd. one tap away. Install the Wenlas web app from your browser.' };
+export default function AppsPage() {
+  return <div className="container apps-page"><section className="apps-intro"><span className="eyebrow muted">YOUR NEXT UPGRADE. ONE TAP AWAY.</span><h1>Good tech.<br/><span className="purple">Right in your pocket.</span></h1><p>Explore the Wenlas collection and save your favourite finds. Add Wenlas to your home screen for easy access whenever inspiration strikes.</p><AppInstall/></section><section className="app-download-grid" aria-label="Install Wenlas"><article><div className="app-platform-icon"><Smartphone/></div><span className="eyebrow muted">IPHONE & ANDROID</span><h2>Take Wenlas with you.</h2><p>On Android, choose Install app from your browser menu. On iPhone, open this page in Safari, tap Share and choose Add to Home Screen.</p><Link className="text-button" href="/products">Explore the collection<ArrowUpRight size={17}/></Link></article><article><div className="app-platform-icon"><Monitor/></div><span className="eyebrow muted">YOUR DESKTOP</span><h2>A little more room.</h2><p>Open Wenlas in Chrome or Edge and choose Install this site as an app from the browser menu.</p><AppInstall/></article></section></div>;
+}

@@ -1,0 +1,75 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/.next-e2e/
+/.next-preview/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+/.data/
+/test-results/
+/playwright-report/
+/artifacts/
+/outputs/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+/native/**/build/
+/native/**/.gradle/
+/native/**/bin/
+/native/**/obj/
+/native/**/publish/
+/native/android/local.properties
+/native/windows/MicrosoftEdgeWebview2Setup.exe
+/native/windows/*-files.nsh
+*.jks
+*.keystore
+*.p12
+*.key
+*.apk
+*.aab
+
+# Previous native clients are archived locally until a separate Wenlas release.
+/native/
+
+# Archive the previous business operational documents locally.
+/*.md
+!/README.md
+!/AGENTS.md
+/docs/**
+!/docs/WENLAS.md
+!/docs/HOSTINGER.md
+!/docs/INVENTORY.md

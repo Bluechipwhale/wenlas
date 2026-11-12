@@ -1,0 +1,33 @@
+import {test,expect} from '@playwright/test';
+import snapshot from '../../data/wenlas-products.json';
+const email='owner@example.test',password='Private test password 284!',token='test-only-wenlas-setup-code-123456789012345678';
+test('stock changes update another browser and team access can be invited, edited and revoked',async({page,browser,baseURL})=>{
+ const origin=baseURL!,product=snapshot.products[0];
+ expect((await page.request.get('/api/inventory')).status()).toBe(401);
+ const setup=await page.request.post('/api/inventory/auth',{headers:{origin},data:{action:'setup',email,password,token}});expect(setup.ok()).toBe(true);
+ await page.goto('/inventory');await expect(page.getByRole('heading',{name:'Inventory overview',exact:true})).toBeVisible();
+ await expect(page.locator('.inventory-metrics')).toContainText('98');
+ const customer=await browser.newContext({viewport:{width:390,height:844}}),store=await customer.newPage();
+ await store.goto(origin+'/products/'+product.slug);await expect(store.locator('.detail-copy')).toContainText('Availability on request');
+ await page.getByRole('button',{name:'Manage stock: '+product.name,exact:true}).click();
+ const editor=page.getByRole('dialog',{name:'Manage stock',exact:true});await editor.getByLabel('Quantity',{exact:true}).fill('8');await editor.getByLabel('Reason / reference').fill('Browser verification receipt');await editor.getByRole('button',{name:'Save stock movement',exact:true}).click();await expect(editor).toHaveCount(0);
+ const row=page.getByRole('row').filter({has:page.getByText(product.name,{exact:true})});await expect(row).toContainText('In stock');
+ await expect(store.locator('.detail-copy .status-chip')).toHaveText('8 available',{timeout:15000});
+ await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:'artifacts/wenlas-inventory.png',fullPage:true});
+ await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'artifacts/wenlas-inventory-mobile.png',fullPage:true});await page.setViewportSize({width:1440,height:1000});
+ await page.getByRole('button',{name:'Movement history',exact:true}).click();await expect(page.locator('.inventory-table')).toContainText('Browser verification receipt');
+ await page.getByRole('button',{name:'Team & emails',exact:true}).click();
+ const inviteForm=page.locator('.inventory-team-form');await inviteForm.getByLabel('Email address',{exact:true}).fill('client@example.test');await inviteForm.getByRole('combobox',{name:'Access level',exact:true}).selectOption('viewer');await inviteForm.getByRole('button',{name:'Create invitation link'}).click();
+ const inviteUrl=await inviteForm.getByRole('textbox',{name:'Private invitation link',exact:true}).inputValue();
+ const inviteToken=new URLSearchParams(new URL(inviteUrl).hash.slice(1)).get('invite');expect(inviteToken).toBeTruthy();
+ const client=await browser.newContext();const accepted=await client.request.post(origin+'/api/inventory/auth',{headers:{origin},data:{action:'accept-invite',token:inviteToken,password}});expect(accepted.ok()).toBe(true);
+ const denied=await client.request.post(origin+'/api/inventory',{headers:{origin},data:{id:crypto.randomUUID(),product_id:product.id,kind:'receive',quantity:1,reason:'Must be rejected'}});expect(denied.status()).toBe(403);
+ // Refresh the team list after the invitee activates their account.
+ await page.getByRole('button',{name:'Stock overview',exact:true}).click();await page.getByRole('button',{name:'Team & emails',exact:true}).click();
+ await page.locator('.inventory-team-list>div').filter({hasText:'client@example.test'}).getByRole('button',{name:'Edit',exact:true}).click();
+ const account=page.locator('.inventory-team-editor');await account.getByLabel('Email address',{exact:true}).fill('updated-client@example.test');await account.getByRole('combobox',{name:'Access level',exact:true}).selectOption('manager');await account.getByRole('button',{name:'Save account'}).click();await expect(account).toHaveCount(0);
+ expect((await client.request.get(origin+'/api/inventory')).status()).toBe(401);
+ const login=await client.request.post(origin+'/api/inventory/auth',{headers:{origin},data:{action:'login',email:'updated-client@example.test',password}});expect(login.ok()).toBe(true);
+ const stock=await page.request.get('/api/inventory/export');expect(stock.ok()).toBe(true);expect(await stock.text()).toContain(product.name);
+ await customer.close();await client.close();
+});

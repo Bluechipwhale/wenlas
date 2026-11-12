@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="244" height="64" viewBox="0 0 244 64" role="img" aria-label="Wenlas Resources Ltd.">
+  <rect x="1" y="7" width="50" height="50" rx="15" fill="#102d29"/>
+  <path d="m11 23 6 20h6l3-11 3 11h6l6-20h-7l-3 12-3-12h-5l-3 12-3-12z" fill="#ddf59b"/>
+  <text x="64" y="37" fill="#102d29" font-family="Arial,sans-serif" font-size="35" font-weight="700" letter-spacing="-1.5">wenlas<tspan fill="#006b5e">.</tspan></text>
+  <text x="66" y="53" fill="#67736e" font-family="Arial,sans-serif" font-size="9" font-weight="600" letter-spacing="2.3">RESOURCES LTD.</text>
+</svg>

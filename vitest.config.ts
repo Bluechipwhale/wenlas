@@ -1,0 +1,3 @@
+import { defineConfig } from 'vitest/config';
+import { fileURLToPath } from 'node:url';
+export default defineConfig({test:{env:{WENLAS_CATALOGUE_MODE:'false'},include:['tests/**/*.test.ts'],testTimeout:30000,hookTimeout:60000,maxWorkers:1},resolve:{alias:{'server-only':fileURLToPath(new URL('./tests/server-only.ts',import.meta.url)),'@':fileURLToPath(new URL('./src',import.meta.url))}}});

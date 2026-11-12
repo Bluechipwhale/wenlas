@@ -1,0 +1,5 @@
+'use client';
+import { useState,useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import {requestJson} from '@/lib/client-request';
+export function DriverAvailability({available}:{available:boolean}){const [busy,setBusy]=useState(false),[message,setMessage]=useState('');const [refreshing,startTransition]=useTransition();const router=useRouter();return <div className="section"><span className="status-chip">{available?'Available for assignment':'Unavailable'}</span><button className="small-button" disabled={busy||refreshing} onClick={async()=>{setBusy(true);setMessage('');try{await requestJson('/api/driver/availability',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({available:!available})});startTransition(()=>router.refresh());setMessage('Availability updated.');}catch(e){setMessage(e instanceof Error?e.message:'Unable to update');}finally{setBusy(false);}}}>{available?'Mark unavailable':'Mark available'}</button>{message&&<p role="status">{message}</p>}</div>;}

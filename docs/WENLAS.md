@@ -13,3 +13,7 @@ The storefront is live at https://mediumspringgreen-gazelle-531200.hostingersite
 Use npm run import:wenlas to resume a cached source import, or npm run import:wenlas -- --refresh to fetch current product details. The importer checks seller identity, pagination counts, unique IDs, prices and photos. It never invents physical stock. Existing inventory is retained when the source snapshot is refreshed.
 
 Live payment checkout and native installer releases require separate commissioning. The installable Wenlas web app is available at /apps. No previous business installer is offered as a Wenlas download.
+
+The storefront uses a navy and cyan product showcase, visible naira prices, category shortcuts and cleaner product cards. Unconfirmed products do not show an availability badge or claim to be in stock; confirmed inventory still controls stock warnings and enquiry-only ordering.
+
+Search discovery includes unique homepage, collection, category, brand, contact and product metadata, canonical URLs, social previews, a public catalogue sitemap, crawl rules and safe JSON-LD for the business, products and breadcrumbs. Unknown product availability is omitted from structured offers. Filtered search pages remain outside indexing. Search engines control crawling, indexing and rankings; metadata does not promise a particular position or timing.

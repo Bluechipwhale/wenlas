@@ -1,3 +1,4 @@
+import {pageMetadata} from '@/lib/seo';
 import Link from 'next/link';
 import Image from 'next/image';
 import {localMode,supabase,configured} from '@/lib/server';
@@ -7,7 +8,7 @@ import {wenlasProducts} from '@/lib/wenlas-catalogue';
 import type {Product} from '@/lib/types';
 import './brands.css';
 type Brand={name:string;display_name:string;logo_url:string;description:string;product_count:number};
-export const metadata={title:'Shop by brand'};
+export const metadata=pageMetadata({title:'Shop Tech Brands in Ikeja, Lagos',description:'Explore headphone, speaker and accessory brands at Wenlas Resources Ltd. Browse products and naira prices from our Computer Village, Ikeja store.',path:'/brands'});
 export default async function Brands(){
  let brands:Brand[]=[];
  if(wenlasCatalogueMode()){

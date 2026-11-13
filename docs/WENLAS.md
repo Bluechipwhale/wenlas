@@ -8,6 +8,8 @@ Run npm run dev for a local preview. Catalogue mode is enabled by default and is
 
 The source repository is https://github.com/Bluechipwhale/wenlas. The copied old Git metadata is archived in ignored .data/wenlas-import/original-edgedirect2u-git. No old commits are pushed into the new repository.
 
+The storefront is live at https://mediumspringgreen-gazelle-531200.hostingersite.com. Its /inventory workspace uses a dedicated Hostinger MySQL database with the initial owner configured. All 98 opening quantities remain unconfirmed until staff record actual counts or receipts.
+
 Use npm run import:wenlas to resume a cached source import, or npm run import:wenlas -- --refresh to fetch current product details. The importer checks seller identity, pagination counts, unique IDs, prices and photos. It never invents physical stock. Existing inventory is retained when the source snapshot is refreshed.
 
 Live payment checkout and native installer releases require separate commissioning. The installable Wenlas web app is available at /apps. No previous business installer is offered as a Wenlas download.

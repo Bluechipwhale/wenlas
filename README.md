@@ -1,72 +1,47 @@
 # Wenlas Resources Ltd.
 
-**Wenlas** is an electronics storefront with all **98 products**, **9 categories** and **292 product photos** imported from the owner's [Jiji catalogue](https://jiji.ng/sellerpage-Cya3vFFCDoDTmxwjjm6P39IL). It includes category and brand browsing, search, product galleries, saved favourites, an installable web app and the inherited administration tools.
+Wenlas is an electronics storefront with 98 products, 9 categories and 292 product photos imported from the owner's [Jiji catalogue](https://jiji.ng/sellerpage-Cya3vFFCDoDTmxwjjm6P39IL). It uses the supplied official Wenlas logo and navy/cyan branding.
 
-**Start here:** [Wenlas setup and catalogue notes](docs/WENLAS.md). Other historical migration and hosting documents describe the original business.
+- [Live storefront](https://mediumspringgreen-gazelle-531200.hostingersite.com)
+- [Inventory workspace](https://mediumspringgreen-gazelle-531200.hostingersite.com/inventory)
+- [Source repository](https://github.com/Bluechipwhale/wenlas)
+
+## Inventory and team access
+
+Production inventory uses a dedicated Wenlas MySQL database on Hostinger. The owner can record receipts, sales, removals and physical counts, set reorder levels, export stock and review movement history. Stock changes appear across the team and storefront within seconds.
+
+Team & emails lets the owner invite managers or viewers, edit account email addresses and disable access. Every user can change their own password. Credentials and invitation links stay private and are never committed.
+
+All imported quantities begin unconfirmed. Staff must record actual opening counts or receipts before treating them as confirmed stock. Product enquiries use the original Jiji listings; online payment checkout is not commissioned.
 
 ## Run locally
 
-Use Node 24 and npm:
+Use Node 24:
 
-~~~sh
+```sh
 npm ci
 npm run dev
-~~~
+```
 
-Open http://127.0.0.1:3000 for the storefront and http://127.0.0.1:3000/inventory for the secure inventory workspace. Catalogue mode keeps Wenlas separate from the original project's database. Physical stock is unconfirmed until recorded through inventory management; each imported listing links to Wenlas on Jiji for availability enquiries.
+Copy `.env.example` to `.env.local` and follow the Wenlas configuration notes. Development inventory uses a separate SQLite file; production requires the dedicated MySQL settings. Previous business credentials are not used for Wenlas inventory.
 
-Copy .env.example to .env.local for the documented configuration. Local management uses .data/wenlas.sqlite and is limited to development on loopback. Production inventory uses a separate Wenlas MySQL database, with live stock updates, an audit ledger, low-stock thresholds and editable team accounts. Set NEXT_PUBLIC_SITE_URL to the actual Wenlas HTTPS domain before deployment. Customer authentication, online administration, payments and native app releases require separate commissioning.
-
-## Implemented
-
-- Responsive discovery, autocomplete, categories/subcategories, filters, product galleries/options, brand and merchant pages, device-local wishlist/cart, checkout and account screens.
-- Theme Studio with actual storefront iframe previews, editable presets, design tokens, branding uploads, draft isolation, confirmed publication, version history, rollback and unsaved-change protection.
-- Validated management forms for products, categories, merchants, campaigns, coupons, policies, suppliers, procurement records, warehouses, drivers, returns, reviews and settlement records.
-- Transactional stock reservations, integer-kobo totals, server prices/options, idempotent checkout, multi-owner allocations and audited adjustments. Product editing cannot overwrite inventory.
-- Server Paystack initialization and trusted verification, signed/idempotent charge webhooks, persisted payment initialization recovery, bounded refund requests, provider refund processing and status reconciliation.
-- Merchant-isolated products, stock, store profiles, orders, commissions and settlement history; authenticated driver dispatch, recipient confirmation, failure reasons, availability, navigation and event timelines.
-- RLS on every base table, scoped RPCs, secure cookie refresh, private no-store responses, SEO metadata/sitemap, installable online driver shell and offline reconnect screen.
-
-## Verification
+## Validate and deploy
 
 ```sh
 npm run lint
 npm run typecheck
 npm test
-npm run build
+npx playwright test --config playwright.wenlas.config.ts
+npm run build:hostinger
+npm run check:production
 ```
 
-Run the isolated browser verification:
-
-```sh
-npm run test:e2e
-```
-
-Browser tests start their own isolated sandbox on port 3100 and explicitly disable live service credentials. They use installed Chrome locally and Playwright Chromium in CI. To use Playwright Chromium instead, change `channel` in `playwright.config.ts` and install that browser. Tests cover storefront/search/variants/wishlist, reservation checkout, theme draft/publish/rollback, mobile overflow, admin screens, recovery screens, saved-address autofill, cross-tab cart updates, CSP enforcement and service/access errors. They mutate the local sandbox and restore theme state; use a disposable development database, not production credentials.
-
-The 50 business/provider/PostgreSQL/storage/auth tests execute all migrations and cover RLS, stock, allocations, duplicate webhooks, refund claims, driver proof and payment initialization. PGlite simulates Auth/Storage schemas; provider responses are mocked. Real hosted sessions, Storage, Paystack and cross-connection load testing still require staging acceptance.
+The application release passed these checks in GitHub Actions. Hostinger runs Node 24, `npm run build:hostinger`, and the generated Next.js standalone server. Deploy the committed source archive without changing another account's existing Git connection. See the hosting guide for packaging and private environment settings.
 
 ## Guides
 
-- [Web app, Android APKs, Windows installer and administrator access](docs/APPS.md)
+- [Catalogue and branding](docs/WENLAS.md)
+- [Inventory and editable team accounts](docs/INVENTORY.md)
+- [Hostinger deployment and database configuration](docs/HOSTINGER.md)
 
-Deploy this repository from Hostinger's GitHub integration using the `main` branch, Next.js, Node 24, install `npm ci --include=dev`, build `npm run build:hostinger`, and start `node --use-system-ca .next/standalone/server.js`. The build prepares public Supabase/domain defaults from `config/hostinger-public.json`. Private service/payment keys remain host environment settings. See the Hostinger guide for domain, authentication and acceptance checks.
-
-- [Connected project and remaining launch steps](docs/LAUNCH.md)
-- [Supabase and migrations](docs/SUPABASE.md)
-- [Paystack and finance](docs/PAYSTACK.md)
-- [Hostinger Business, domain and HTTPS](docs/HOSTINGER.md)
-- [Administrator and operations guide](docs/ADMIN.md)
-- [Architecture, verified scope and remaining work](docs/STATUS.md)
-
-`npm run check:env` validates required launch values. `npm run build:hostinger` builds and packages standalone assets when that Hostinger workflow is needed. `npm run check:production` verifies that package against the configured services. On Windows, `powershell -NoProfile -File scripts/package-hostinger.ps1` prepares a verified source ZIP for Hostinger upload without local secrets or generated output. `npm run seed:generate` regenerates the development seed from typed fixtures and refuses to overwrite an existing default-theme migration; do not change deployed migration history.
-
-## Source layout
-
-`src/app` contains server pages and APIs; `src/components` contains shared storefront and workspace UI; `src/lib` separates validation, tokens, data access, local transactions and provider integrations. `supabase/migrations` owns production schema/RLS/RPCs. `supabase/seed.sql` is development-only. `tests` includes business, PostgreSQL and browser verification. `public` contains locally served fonts and driver shell assets.
-
-## Launch status
-
-The Wenlas catalogue is implemented locally. No public Wenlas deployment or native installer release has been made by this change. Stock, a dedicated backend, payments, business policies and an actual domain need commissioning before accepting online orders. See [Wenlas setup](docs/WENLAS.md).
-
-See [Inventory and team access](docs/INVENTORY.md) and [Wenlas Hostinger deployment](docs/HOSTINGER.md). The official customer-supplied Wenlas logo is used throughout the storefront and workspace.
+The live storefront and dedicated inventory database were commissioned on 13 November 2026. Customer accounts, online payments and native installer releases require separate commissioning. Historical commerce code and test fixtures remain in the repository but are not connected to the previous business's production services.

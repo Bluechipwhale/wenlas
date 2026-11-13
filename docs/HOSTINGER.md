@@ -2,7 +2,7 @@
 
 Source repository: https://github.com/Bluechipwhale/wenlas. No changes are pushed to the previous business repository, and no previous business database is used.
 
-The current Wenlas temporary origin is https://mediumspringgreen-gazelle-531200.hostingersite.com. Verify its deployment status in hPanel before treating it as live. Hostinger's current Git connection belongs to another account; deploy the verified Wenlas source archive without changing that connection.
+The live Wenlas temporary origin is https://mediumspringgreen-gazelle-531200.hostingersite.com. The storefront and dedicated MySQL inventory connection were verified on 13 November 2026. Hostinger's current Git connection belongs to another account; deploy the verified Wenlas source archive without changing that connection.
 
 Use the Business plan's separate Node.js Web App. Framework: Next.js. Node: 24. Install: npm ci --include=dev. Build: npm run build:hostinger. Output: .next. Start: npm run start:hostinger, or entry .next/standalone/server.js if hPanel asks for an entry file. Keep Hostinger's assigned PORT and set HOSTNAME=0.0.0.0.
 
@@ -30,7 +30,7 @@ Keep WENLAS_DB_TLS=false only for Hostinger's loopback database connection; use 
 
 The application creates its own Wenlas-prefixed inventory/account tables and seeds 98 product IDs with unconfirmed, zero quantities. MySQL retains stock, movement history and accounts across source redeployments. SQLite is used only for development and tests.
 
-Open /inventory/login to activate the owner account with the private setup code and a password chosen by the owner. The setup code is useless once an owner exists. The owner can then edit email addresses, invite stock managers/viewers and disable accounts. Invitations are private single-use links; the app does not send external email.
+The initial owner is configured. Sign in at /inventory/login using the privately supplied access details, then use the key icon to choose your own password. On a fresh database only, activate the owner with the private setup code. The setup code is useless once an owner exists. The owner can edit email addresses, invite stock managers/viewers and disable accounts. Invitations are private single-use links; the app does not send external email.
 
 ## Verify the release
 

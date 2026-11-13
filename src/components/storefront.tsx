@@ -8,10 +8,10 @@ import type {DealPlacement} from '@/lib/live-deals';
 import { ProductCard } from './product-card';
 import {CategoryThumbnail} from './category-thumbnail';
 import {WenlasHero} from './wenlas-hero';
-export function Storefront({theme:t,products,categories,banners,merchants,deals=[],preview=false,count=products.length}:{theme:Theme;products:Product[];categories:Category[];banners:RecordRow[];merchants:RecordRow[];deals?:DealPlacement[];preview?:boolean;count?:number}) {
+export function Storefront({theme:t,products,categories,banners,merchants,deals=[],preview=false}:{theme:Theme;products:Product[];categories:Category[];banners:RecordRow[];merchants:RecordRow[];deals?:DealPlacement[];preview?:boolean;count?:number}) {
   const featured=products.filter(p=>p.featured);const newProducts=products.filter(p=>!p.featured);
   const activeBanners=banners.filter(b=>b.data.enabled===true);
-  return <div className="storefront-home"><WenlasHero theme={t} products={products} count={count}/>
+  return <div className="storefront-home"><WenlasHero theme={t} products={products}/>
   <div className="shopping-promise container" aria-label="How shopping works"><span><Compass size={19}/><span><strong>Explore freely</strong><small>No account needed to browse</small></span></span><span><ShoppingBag size={19}/><span><strong>Save your favourites</strong><small>Keep your next upgrades close</small></span></span><span><ShieldCheck size={19}/><span><strong>Talk to Wenlas</strong><small>Confirm your find before ordering</small></span></span></div>
   <div className="benefits container"><span><PackageCheck size={21}/><b>Delivery, your way</b><small>Track your order at every step</small></span><span><Store size={21}/><b>Discover independent stores</b><small>A marketplace of possibilities</small></span><span><Headphones size={21}/><b>A little help, whenever</b><small>Your questions, answered</small></span></div>
   {deals.filter(d=>d.products.length).map(d=><section key={d.kind} className="section container"><div className="section-heading"><div><span className="eyebrow muted">CURRENT OFFERS</span><h2>{d.title}</h2></div><Link className="text-button" href={'/deals?kind='+d.kind}>Explore deals<ArrowRight size={17}/></Link></div><div className="product-grid">{d.products.map(p=><ProductCard key={p.id} product={p}/>)}</div></section>)}

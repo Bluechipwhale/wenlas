@@ -5,7 +5,7 @@ import type { Product } from '@/lib/types';
 import type { Theme } from '@/lib/theme';
 import { money } from '@/lib/types';
 
-export function WenlasHero({ theme, products, count }: { theme: Theme; products: Product[]; count: number }) {
+export function WenlasHero({ theme, products }: { theme: Theme; products: Product[] }) {
   const main = products.find(p => /airpods max/i.test(p.name)) || products[0];
   const side = products.find(p => /zealot/i.test(p.name)) || products[1];
   return <>
@@ -15,7 +15,7 @@ export function WenlasHero({ theme, products, count }: { theme: Theme; products:
         <h1>{theme.heroTitle.split('\n').map((line, i) => <span key={line} className={i ? 'wenlas-title-accent' : ''}>{line}</span>)}</h1>
         <p>{theme.heroText}</p>
         <div className="hero-buttons"><Link className="button" href={theme.heroLink}>{theme.heroCta}<ArrowUpRight size={18}/></Link><Link className="text-button" href={theme.heroSecondaryLink}>{theme.heroSecondary}<ArrowRight size={17}/></Link></div>
-        <div className="wenlas-hero-meta"><span><MapPin size={15}/>Ikeja, Lagos</span><span className="wenlas-meta-divider"/><span>{count} products to explore</span></div>
+        <div className="wenlas-hero-meta"><span><MapPin size={15}/>Ikeja, Lagos</span><span className="wenlas-meta-divider"/><span>Quality tech for everyday life</span></div>
       </div>
       <div className="wenlas-hero-display">
         <div className="wenlas-orbit" aria-hidden="true"/><span className="wenlas-display-number" aria-hidden="true">W.</span>

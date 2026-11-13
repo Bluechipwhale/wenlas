@@ -4,7 +4,8 @@ import snapshot from '../../data/wenlas-products.json';
 test('shows all imported products, category counts, working search and preserved source details',async({page,request})=>{
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto('/');await expect(page).toHaveTitle(/Wenlas Resources Ltd/);
-  await expect(page.locator('.wenlas-hero')).toContainText('98 products to explore');
+  await expect(page.locator('.wenlas-hero')).toContainText('THE WENLAS TECH');
+  await expect(page.locator('.wenlas-hero')).toContainText('Quality tech for everyday life');
   await expect(page.locator('.category-tile')).toHaveCount(9);
   const ids:string[]=[];
   for(let page=1;page<=9;page++){
